@@ -1,0 +1,224 @@
+/dts-v1/;
+
+/*#include "../../../../../fsl-imx8mq-sr-som.dtsi"*/
+#include "../../../external/gpl2/dts/dist/arch/arm64/boot/dts/freescale/imx8mq.dtsi"
+
+/ {
+	model = "SolidRun i.MX8MQ Hummingboard Pulse";
+	compatible = "solidrun,hummingboard-pulse", "fsl,imx8mq";
+
+	chosen {
+		bootargs = "console=ttymxc0,115200 earlycon=ec_imx6q,0x30860000,115200";
+		stdout-path = &uart1;
+	};
+
+	regulators {
+		compatible = "simple-bus";
+		#address-cells = <1>;
+		#size-cells = <0>;
+
+		reg_usdhc2_vmmc: usdhc2_vmmc {
+			compatible = "regulator-fixed";
+			regulator-name = "VSD_3V3";
+			regulator-min-microvolt = <3300000>;
+			regulator-max-microvolt = <3300000>;
+			gpio = <&gpio2 19 GPIO_ACTIVE_HIGH>;
+			enable-active-high;
+		};
+		
+		v_5v0: regulator-v-5v0 {
+			compatible = "regulator-fixed";
+			regulator-always-on;
+			regulator-max-microvolt = <5000000>;
+			regulator-min-microvolt = <5000000>;
+			regulator-name = "v_5v0";
+		};
+	};
+};
+
+&clk {
+	assigned-clocks = <&clk IMX8MQ_AUDIO_PLL1>, <&clk IMX8MQ_AUDIO_PLL2>;
+	assigned-clocks-rates = <786432000>, <722534400>;
+};
+
+&uart2 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&pinctrl_uart2>;
+	/*assigned-clock = <&clk IMX8MQ_CLK_UART2_SRC>;*/ /* ERROR IN THIS LINE */
+	assigned-clock-parents = <&clk IMX8MQ_CLK_25M>;
+	status = "okay";
+};
+
+&uart3 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&pinctrl_uart3>;
+	/*assigned-clock = <&clk IMX8MQ_CLK_UART3_SRC>; */ /* ERROR IN THIS LINE  */
+	assigned-clock-parents = <&clk IMX8MQ_SYS1_PLL_80M>;
+	fsl,uart-has-rtscts;
+	status = "okay";
+};
+&iomuxc {
+	pinctrl-names = "default";
+	pinctrl-0 = <&pinctrl_hog>;
+
+	imx8mq-evk {
+		pinctrl_hog: hoggrp {
+			fsl,pins = <
+				MX8MQ_IOMUXC_NAND_READY_B_GPIO3_IO16		0x19
+				MX8MQ_IOMUXC_NAND_WE_B_GPIO3_IO17		0x19
+				MX8MQ_IOMUXC_NAND_WP_B_GPIO3_IO18		0x19
+			>;
+		};
+
+		pinctrl_csi2: csi2grp {
+			fsl,pins = <
+/* Place holder until PowerDown and Reset GPIOs are finalized.
+				MX8MQ_IOMUXC_GPIO1_IO05_GPIO1_IO5		0x19
+				MX8MQ_IOMUXC_GPIO1_IO06_GPIO1_IO6		0x19
+*/
+				MX8MQ_IOMUXC_GPIO1_IO15_CCMSRCGPCMIX_CLKO2	0x59
+			>;
+		};
+
+		pinctrl_i2c2: i2c2grp {
+			fsl,pins = <
+				MX8MQ_IOMUXC_I2C2_SCL_I2C2_SCL			0x4000007f
+				MX8MQ_IOMUXC_I2C2_SDA_I2C2_SDA			0x4000007f
+			>;
+		};
+
+		pinctrl_i2c3: i2c3grp {
+			fsl,pins = <
+				MX8MQ_IOMUXC_I2C3_SCL_I2C3_SCL			0x4000007f
+				MX8MQ_IOMUXC_I2C3_SDA_I2C3_SDA			0x4000007f
+			>;
+		};
+
+		pinctrl_pcie1: pcie1grp {
+			fsl,pins = <
+				MX8MQ_IOMUXC_I2C4_SDA_GPIO5_IO21	0x16
+				MX8MQ_IOMUXC_ECSPI2_SCLK_GPIO5_IO10	0x16
+				MX8MQ_IOMUXC_ECSPI2_MISO_GPIO5_IO12	0x16
+			>;
+		};
+
+		pinctrl_sai1: sai1grp {
+			fsl,pins = <
+				MX8MQ_IOMUXC_SAI1_MCLK_SAI1_MCLK		0xd6
+				MX8MQ_IOMUXC_SAI1_TXFS_SAI1_TX_SYNC		0xd6
+				MX8MQ_IOMUXC_SAI1_RXD7_SAI1_TX_SYNC		0xd6
+				MX8MQ_IOMUXC_SAI1_TXC_SAI1_TX_BCLK		0xd6
+				MX8MQ_IOMUXC_SAI1_TXD0_SAI1_TX_DATA0		0xd6
+				MX8MQ_IOMUXC_SAI1_TXD1_SAI1_TX_DATA1		0xd6
+				MX8MQ_IOMUXC_SAI1_TXD2_SAI1_TX_DATA2		0xd6
+				MX8MQ_IOMUXC_SAI1_TXD3_SAI1_TX_DATA3		0xd6
+				MX8MQ_IOMUXC_SAI1_TXD4_SAI1_TX_DATA4		0xd6
+				MX8MQ_IOMUXC_SAI1_TXD5_SAI1_TX_DATA5		0xd6
+				MX8MQ_IOMUXC_SAI1_TXD6_SAI1_TX_DATA6		0xd6
+				MX8MQ_IOMUXC_SAI1_TXD7_SAI1_TX_DATA7		0xd6
+			>;
+		};
+
+		pinctrl_sai2: sai2grp {
+			fsl,pins = <
+				MX8MQ_IOMUXC_SAI2_TXFS_SAI2_TX_SYNC	0xd6
+				MX8MQ_IOMUXC_SAI2_TXC_SAI2_TX_BCLK	0xd6
+				MX8MQ_IOMUXC_SAI2_MCLK_SAI2_MCLK	0xd6
+				MX8MQ_IOMUXC_SAI2_TXD0_SAI2_TX_DATA0	0xd6
+				MX8MQ_IOMUXC_GPIO1_IO08_GPIO1_IO8	0xd6
+			>;
+		};
+
+		pinctrl_sai5: sai5grp {
+			fsl,pins = <
+				MX8MQ_IOMUXC_SAI5_MCLK_SAI5_MCLK	0xd6
+				MX8MQ_IOMUXC_SAI5_RXC_SAI5_RX_BCLK	0xd6
+				MX8MQ_IOMUXC_SAI5_RXFS_SAI5_RX_SYNC	0xd6
+				MX8MQ_IOMUXC_SAI5_RXD0_SAI5_RX_DATA0	0xd6
+				MX8MQ_IOMUXC_SAI5_RXD1_SAI5_RX_DATA1    0xd6
+				MX8MQ_IOMUXC_SAI5_RXD2_SAI5_RX_DATA2    0xd6
+				MX8MQ_IOMUXC_SAI5_RXD3_SAI5_RX_DATA3    0xd6
+			>;
+		};
+
+		pinctrl_spdif1: spdif1grp {
+			fsl,pins = <
+				MX8MQ_IOMUXC_SPDIF_TX_SPDIF1_OUT	0xd6
+				MX8MQ_IOMUXC_SPDIF_RX_SPDIF1_IN		0xd6
+			>;
+		};
+
+
+		pinctrl_typec: typecgrp {
+			fsl,pins = <
+				MX8MQ_IOMUXC_NAND_RE_B_GPIO3_IO15	0x16
+				MX8MQ_IOMUXC_GPIO1_IO06_GPIO1_IO6	0x17059
+			>;
+		};
+
+		pinctrl_uart2: uart2grp {
+			fsl,pins = <
+				MX8MQ_IOMUXC_UART2_TXD_UART2_DCE_TX		0x49
+				MX8MQ_IOMUXC_UART2_RXD_UART2_DCE_RX		0x49
+				MX8MQ_IOMUXC_UART4_RXD_UART2_DCE_CTS_B		0x49
+				MX8MQ_IOMUXC_UART4_TXD_UART2_DCE_RTS_B		0x49
+			>;
+		};
+
+		pinctrl_uart3: uart3grp {
+			fsl,pins = <
+				MX8MQ_IOMUXC_UART3_TXD_UART3_DCE_TX		0x49
+				MX8MQ_IOMUXC_UART3_RXD_UART3_DCE_RX		0x49
+				MX8MQ_IOMUXC_ECSPI1_MISO_UART3_DCE_CTS_B	0x49
+				MX8MQ_IOMUXC_ECSPI1_SS0_UART3_DCE_RTS_B		0x49
+			>;
+		};
+
+		pinctrl_usbh1_vbus: usbh1-vbus {
+			fsl,pins = <MX8MQ_IOMUXC_NAND_CE1_B_GPIO3_IO2	0x19>;
+		};
+
+		pinctrl_usdhc2_gpio: usdhc2grpgpio {
+			fsl,pins = <
+				MX8MQ_IOMUXC_SD2_CD_B_GPIO2_IO12	0x41
+				MX8MQ_IOMUXC_SD2_RESET_B_GPIO2_IO19	0x41
+			>;
+		};
+
+		pinctrl_usdhc2: usdhc2grp {
+			fsl,pins = <
+				MX8MQ_IOMUXC_SD2_CLK_USDHC2_CLK			0x83
+				MX8MQ_IOMUXC_SD2_CMD_USDHC2_CMD			0xc3
+				MX8MQ_IOMUXC_SD2_DATA0_USDHC2_DATA0		0xc3
+				MX8MQ_IOMUXC_SD2_DATA1_USDHC2_DATA1		0xc3
+				MX8MQ_IOMUXC_SD2_DATA2_USDHC2_DATA2		0xc3
+				MX8MQ_IOMUXC_SD2_DATA3_USDHC2_DATA3		0xc3
+				MX8MQ_IOMUXC_GPIO1_IO04_USDHC2_VSELECT		0xc1
+			>;
+		};
+
+		pinctrl_usdhc2_100mhz: usdhc2grp100mhz {
+			fsl,pins = <
+				MX8MQ_IOMUXC_SD2_CLK_USDHC2_CLK			0x85
+				MX8MQ_IOMUXC_SD2_CMD_USDHC2_CMD			0xc5
+				MX8MQ_IOMUXC_SD2_DATA0_USDHC2_DATA0		0xc5
+				MX8MQ_IOMUXC_SD2_DATA1_USDHC2_DATA1		0xc5
+				MX8MQ_IOMUXC_SD2_DATA2_USDHC2_DATA2		0xc5
+				MX8MQ_IOMUXC_SD2_DATA3_USDHC2_DATA3		0xc5
+				MX8MQ_IOMUXC_GPIO1_IO04_USDHC2_VSELECT		0xc1
+			>;
+		};
+
+		pinctrl_usdhc2_200mhz: usdhc2grp200mhz {
+			fsl,pins = <
+				MX8MQ_IOMUXC_SD2_CLK_USDHC2_CLK			0x87
+				MX8MQ_IOMUXC_SD2_CMD_USDHC2_CMD			0xc7
+				MX8MQ_IOMUXC_SD2_DATA0_USDHC2_DATA0		0xc7
+				MX8MQ_IOMUXC_SD2_DATA1_USDHC2_DATA1		0xc7
+				MX8MQ_IOMUXC_SD2_DATA2_USDHC2_DATA2		0xc7
+				MX8MQ_IOMUXC_SD2_DATA3_USDHC2_DATA3		0xc7
+				MX8MQ_IOMUXC_GPIO1_IO04_USDHC2_VSELECT		0xc1
+			>;
+		};
+	};
+};

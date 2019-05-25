@@ -16,12 +16,14 @@ maxusers	64
 #
 makeoptions 	DTSARCH="arm aarch64"
 makeoptions	DTSGNUARCH="arm arm64"
-makeoptions	DTSSUBDIR="allwinner amlogic broadcom nvidia rockchip"
+makeoptions	DTSSUBDIR="allwinner amlogic broadcom freescale nvidia rockchip"
 makeoptions	DTS="
 	bcm2837-rpi-3-a-plus.dts
 	bcm2837-rpi-3-b.dts
 	bcm2837-rpi-3-b-plus.dts
 	bcm2837-rpi-cm3-io3.dts
+
+	imx8mq-hummingboard-pulse.dts
 
 	meson-gxbb-nanopi-k2.dts
 	meson-gxbb-nexbox-a95x.dts
@@ -115,6 +117,7 @@ options 	SOC_SUN50I_H6
 options 	SOC_TEGRA210
 options 	SOC_VIRT
 options 	MULTIPROCESSOR
+options		SOC_IMX8
 
 pseudo-device 	openfirm	# /dev/openfirm
 
