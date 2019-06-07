@@ -1,2 +1,19 @@
+# Configurations info for imx8 soc
+
 file	arch/arm/nxp/imx8_platform.c 	soc_imx8
 defflag opt_soc.h		SOC_IMX8
+
+
+# CCM
+define	imx8_ccm
+file 	arch/arm/nxp/imx8_ccm.c		imx8_ccm
+file 	arch/arm/nxp/imx8_ccm_div.c	imx8_ccm
+file	arch/arm/nxp/imx8_ccm_fixed.c	imx8_ccm
+file	arch/arm/nxp/imx8_ccm_gate.c	imx8_ccm
+file 	arch/arm/nxp/imx8_ccm_mux.c	imx8_ccm
+file 	arch/arm/nxp/imx8_ccm_pll.c	imx8_ccm
+
+# IMX8MQ clock controller
+device	imx8mqclkc: imx8_ccm
+attach	imx8mqclkc at fdt with imx8mq_ccm
+file 	arch/arm/nxp/imx8mq_ccm.c	imx8mq_ccm

@@ -259,6 +259,7 @@ sunxiresets*	at fdt? pass 1		# Allwinner misc. resets
 sunxigates*	at fdt? pass 1		# Allwinner misc. gates
 sunxigmacclk*	at fdt? pass 2		# Allwinner GMAC MII/RGMII clock mux
 tegra210car*	at fdt? pass 3		# NVIDIA Tegra CAR (T210)
+imx8mqclkc*	at fdt? pass 1		# Freescale IMX8MQ clock controller
 
 # GPIO controller
 bcmgpio*	at fdt?			# Broadcom BCM283x GPIO
