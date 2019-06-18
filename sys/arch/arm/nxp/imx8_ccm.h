@@ -30,13 +30,14 @@ struct imx8_clk_reset {
 enum imx8_clk_clktype {
 	IMX8_CLK_UNKNOWN,
 	IMX8_CLK_FIXED,
+	IMX8_CLK_GATE2,
 	IMX8_CLK_GATE,
 	IMX8_CLK_PLL,
-/*	IMX8_CLK_MPLL, */
 	IMX8_CLK_DIV,
 	IMX8_CLK_FIXED_FACTOR,
 	IMX8_CLK_MUX,
 	IMX8_CLK_COMPOSITE,
+	IMX8_CLK_SCCG_PLL,
 };
 
 /*
@@ -57,6 +58,48 @@ u_int	imx8_clk_fixed_get_rate(struct imx8_clk_softc *, struct imx8_clk_clk *);
 		.u.fixed.rate = (_rate),			\
 		.get_rate = imx8_clk_fixed_get_rate,		\
 	}
+
+/*
+ * Gate2 clocks
+ */
+
+struct imx8_clk_gate2 {
+	bus_size_t	reg;
+	//uint32_t	mask;
+	const char	*parent;
+	//uint32_t	flags;
+	uint8_t		bit_idx;
+	uint8_t		cgr_val;
+	uint8_t		flags;
+	unsigned int	*share_count;
+
+//#define	IMX8_CLK_GATE_SET_TO_DISABLE		__BIT(0)
+};
+
+int	imx8_clk_gate2_enable(struct imx8_clk_softc *,
+			      struct imx8_clk_clk *, int);
+const char *imx8_clk_gate2_get_parent(struct imx8_clk_softc *,
+				      struct imx8_clk_clk *);
+
+#define	IMX8_CLK_GATE2_FLAGS(_id, _name, _pname, _reg, _bit_idx, _cgr_val , _flags, _scount)	\
+	[_id] = {						\
+		.type = IMX8_CLK_GATE2,				\
+		.base.name = (_name),				\
+		.base.flags = CLK_SET_RATE_PARENT,		\
+		.u.gate2.parent = (_pname),			\
+		.u.gate2.reg = (_reg),				\
+		.u.gate2.bit_idx = (_bit_idx),			\
+		.u.gate2.cgr_val = (_cgr_val),			\
+		.u.gate2.flags = (_flags),			\
+		.u.gate2.share_count = (_scount),		\
+		.enable = imx8_clk_gate2_enable,			\
+		.get_parent = imx8_clk_gate2_get_parent,		\
+	}
+
+#define	IMX8_CLK_GATE2(_id, _name, _pname, _reg, _bit_idx)		\
+	IMX8_CLK_GATE2_FLAGS(_id, _name, _pname, _reg, _bit_idx, 0x3, 0, NULL)
+
+
 
 /*
  * Gate clocks
@@ -90,6 +133,8 @@ const char *imx8_clk_gate_get_parent(struct imx8_clk_softc *,
 
 #define	IMX8_CLK_GATE(_id, _name, _pname, _reg, _bit)		\
 	IMX8_CLK_GATE_FLAGS(_id, _name, _pname, _reg, _bit, 0)
+
+
 
 /*
  * Divider clocks
@@ -246,7 +291,12 @@ const char *imx8_clk_pll_get_parent(struct imx8_clk_softc *,
 		.get_parent = imx8_clk_pll_get_parent,			\
 	}
 
-struct imx8_clk_composite {
+/*
+ * COMPOSITE Clocks
+ */
+
+
+struct imx8_clk_composite {		//wrong definition of composite clock
 	bus_size_t	muxdiv_reg;
 	uint32_t	mux_mask;
 	uint32_t	div_mask;
@@ -265,8 +315,7 @@ const char *imx8_clk_composite_get_parent(struct imx8_clk_softc *, struct imx8_c
 int	imx8_clk_composite_set_parent(struct imx8_clk_softc *, struct imx8_clk_clk *, const char *);
 
 #define	IMX8_COMPOSITE(_id, _name, _parents, _muxdiv_reg, _mux_mask, _div_mask, _gate_reg, _gate_mask, _flags) \
-	{							\
-		.id = (_id),					\
+	[_id] =	{						\
 		.type = IMX8_CLK_COMPOSITE,			\
 		.base.name = (_name),				\
 		.base.flags = 0,				\
@@ -294,54 +343,48 @@ int	imx8_clk_composite_set_parent(struct imx8_clk_softc *, struct imx8_clk_clk *
 #define	IMX8_DIV(_id, _name, _parent, _div_reg, _div_mask, _flags) \
 	IMX8_COMPOSITE(_id, _name, (const char *[]){ _parent }, _div_reg, 0, _div_mask, 0, 0, _flags)
 
-
-
 /*
- * MPLL clocks
- *
+ *  SCCG PLL clocks
+ */
 
-struct imx8_clk_mpll {
-	struct imx8_clk_pll_reg		sdm;
-	struct imx8_clk_pll_reg		sdm_enable;
-	struct imx8_clk_pll_reg		n2;
-	struct imx8_clk_pll_reg		ssen;
-	const char			*parent;
-	uint32_t			flags;
+struct imx8_clk_sccg_pll {
+	bus_size_t	reg;
+	const char	**parents;
+	u_int 		nparents;
+	uint8_t	bypass1;
+	uint8_t	bypass2;
+	unsigned long flags;
 };
 
-u_int	imx8_clk_mpll_get_rate(struct imx8_clk_softc *,
-				struct imx8_clk_clk *);
-const char *imx8_clk_mpll_get_parent(struct imx8_clk_softc *,
-				      struct imx8_clk_clk *);
+const char *imx8_clk_sccg_pll_get_parent(struct imx8_clk_softc *,
+			struct imx8_clk_clk *);
+//insert get rate function here
 
-#define	IMX8_CLK_MPLL(_id, _name, _parent, _sdm, _sdm_enable, _n2,	\
-		       _ssen, _flags)					\
+#define IMX8_CLK_SCCG_PLL(_id, _name, _parents, _nparents, _bypass1, _bypass2, _reg, _flags)	\
 	[_id] = {							\
-		.type = IMX8_CLK_MPLL,					\
+		.type = IMX8_CLK_SCCG_PLL,				\
 		.base.name = (_name),					\
-		.u.mpll.parent = (_parent),				\
-		.u.mpll.sdm = _sdm,					\
-		.u.mpll.sdm_enable = _sdm_enable,			\
-		.u.mpll.n2 = _n2,					\
-		.u.mpll.ssen = _ssen,					\
-		.u.mpll.flags = (_flags),				\
-		.get_rate = imx8_clk_mpll_get_rate,			\
-		.get_parent = imx8_clk_mpll_get_parent,		\
+		.u.sccg_pll.parents = (_parents),			\
+		.u.sccg_pll.nparents = (_nparents),			\
+		.u.sccg_pll.bypass1 = (_bypass1),			\
+		.u.sccg_pll.bypass2 = (_bypass2),			\
+		.u.sccg_pll.reg = (_reg),				\
+		.u.sccg_pll.flags = (_flags),				\
+		.get_parent = imx8_clk_sccg_pll_get_parent,		\
 	}
-
-*/
 
 struct imx8_clk_clk {
 	struct clk	base;
 	enum imx8_clk_clktype type;
 	union {
 		struct imx8_clk_fixed fixed;
+		struct imx8_clk_gate2 gate2;
 		struct imx8_clk_gate gate;
 		struct imx8_clk_div div;
 		struct imx8_clk_fixed_factor fixed_factor;
 		struct imx8_clk_mux mux;
 		struct imx8_clk_pll pll;
-//		struct imx8_clk_mpll mpll;
+		struct imx8_clk_sccg_pll sccg_pll;
 		struct imx8_clk_composite composite;
 	} u;
 
