@@ -312,8 +312,9 @@ imx8_clk_print(struct imx8_clk_softc *sc)
 
 		switch (clk->type) {
 		case IMX8_CLK_FIXED:		type = "fixed"; break;
+		case IMX8_CLK_GATE2:		type = "gate2"; break;
 		case IMX8_CLK_GATE:		type = "gate"; break;
-//		case IMX8_CLK_MPLL:		type = "mpll"; break;
+		case IMX8_CLK_SCCG_PLL:		type = "sgpll"; break;
 		case IMX8_CLK_PLL:		type = "pll"; break;
 		case IMX8_CLK_DIV:		type = "div"; break;
 		case IMX8_CLK_FIXED_FACTOR:	type = "fixed-factor"; break;

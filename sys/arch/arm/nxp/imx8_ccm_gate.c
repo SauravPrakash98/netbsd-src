@@ -27,6 +27,7 @@ imx8_clk_gate_enable(struct imx8_clk_softc *sc, struct imx8_clk_clk *clk,
 		val |= gate->mask;
 	else
 		val &= ~gate->mask;
+	
 	CLK_WRITE(sc, gate->reg, val);
 
 	CLK_UNLOCK(sc);
