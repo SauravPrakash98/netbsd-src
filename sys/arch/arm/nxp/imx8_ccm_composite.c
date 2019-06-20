@@ -24,7 +24,7 @@ imx8_clk_composite_enable(struct imx8_clk_softc *sc, struct imx8_clk_clk *clk,
 	const uint32_t write_mask = composite->gate_mask << 16;
 	const uint32_t write_val = enable ? 0 : composite->gate_mask;
 
-	CLK_WRITE(sc, composite->gate_reg, write_mask | write_val);
+	CLK_WRITE(sc, composite->reg, write_mask | write_val);
 
 	return 0;
 }
@@ -47,7 +47,7 @@ imx8_clk_composite_get_rate(struct imx8_clk_softc *sc,
 	if (prate == 0)
 		return 0;
 
-	const uint32_t val = CLK_READ(sc, composite->muxdiv_reg);
+	const uint32_t val = CLK_READ(sc, composite->reg);
 	const u_int div = __SHIFTOUT(val, composite->div_mask) + 1;
 
 	return prate / div;
@@ -108,7 +108,7 @@ imx8_clk_composite_set_rate(struct imx8_clk_softc *sc,
 		write_val |= __SHIFTIN(best_mux, composite->mux_mask);
 	}
 
-	CLK_WRITE(sc, composite->muxdiv_reg, write_mask | write_val);
+	CLK_WRITE(sc, composite->reg, write_mask | write_val);
 
 	return 0;
 }
@@ -124,7 +124,7 @@ imx8_clk_composite_get_parent(struct imx8_clk_softc *sc,
 	KASSERT(clk->type == IMX8_CLK_COMPOSITE);
 
 	if (composite->mux_mask) {
-		val = CLK_READ(sc, composite->muxdiv_reg);
+		val = CLK_READ(sc, composite->reg);
 		mux = __SHIFTOUT(val, composite->mux_mask);
 	} else {
 		mux = 0;
@@ -149,7 +149,7 @@ imx8_clk_composite_set_parent(struct imx8_clk_softc *sc,
 			const uint32_t write_mask = composite->mux_mask << 16;
 			const uint32_t write_val = __SHIFTIN(mux, composite->mux_mask);
 
-			CLK_WRITE(sc, composite->muxdiv_reg, write_mask | write_val);
+			CLK_WRITE(sc, composite->reg, write_mask | write_val);
 			return 0;
 		}
 	}

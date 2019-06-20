@@ -214,7 +214,7 @@ struct imx8_clk_mux {
 const char *imx8_clk_mux_get_parent(struct imx8_clk_softc *,
 			       struct imx8_clk_clk *);
 
-#define	IMX8_CLK_MUX(_id, _name, _parents, _reg, _sel, _flags)		\
+#define	IMX8_CLK_MUX(_id, _name, _parents, _reg, _sel,_flags)		\
 	[_id] = {							\
 		.type = IMX8_CLK_MUX,					\
 		.base.name = (_name),					\
@@ -222,7 +222,7 @@ const char *imx8_clk_mux_get_parent(struct imx8_clk_softc *,
 		.u.mux.parents = (_parents),				\
 		.u.mux.nparents = __arraycount(_parents),		\
 		.u.mux.reg = (_reg),					\
-		.u.mux.sel = (_sel),					\
+		.u.mux.sel = (_sel),				\
 		.u.mux.flags = (_flags),				\
 		.get_parent = imx8_clk_mux_get_parent,			\
 	}
@@ -297,10 +297,10 @@ const char *imx8_clk_pll_get_parent(struct imx8_clk_softc *,
 
 
 struct imx8_clk_composite {		//wrong definition of composite clock
-	bus_size_t	muxdiv_reg;
+	bus_size_t	reg;
 	uint32_t	mux_mask;
 	uint32_t	div_mask;
-	bus_size_t	gate_reg;
+//	bus_size_t	gate_reg;
 	uint32_t	gate_mask;
 	const char	**parents;
 	u_int		nparents;
@@ -314,24 +314,23 @@ int	imx8_clk_composite_set_rate(struct imx8_clk_softc *, struct imx8_clk_clk *, 
 const char *imx8_clk_composite_get_parent(struct imx8_clk_softc *, struct imx8_clk_clk *);
 int	imx8_clk_composite_set_parent(struct imx8_clk_softc *, struct imx8_clk_clk *, const char *);
 
-#define	IMX8_COMPOSITE(_id, _name, _parents, _muxdiv_reg, _mux_mask, _div_mask, _gate_reg, _gate_mask, _flags) \
-	[_id] =	{						\
-		.type = IMX8_CLK_COMPOSITE,			\
-		.base.name = (_name),				\
-		.base.flags = 0,				\
-		.u.composite.parents = (_parents),		\
-		.u.composite.nparents = __arraycount(_parents),	\
-		.u.composite.muxdiv_reg = (_muxdiv_reg),	\
-		.u.composite.mux_mask = (_mux_mask),		\
-		.u.composite.div_mask = (_div_mask),		\
-		.u.composite.gate_reg = (_gate_reg),		\
-		.u.composite.gate_mask = (_gate_mask),		\
-		.u.composite.flags = (_flags),			\
-		.enable = imx8_clk_composite_enable,		\
+#define	IMX8_COMPOSITE(_id, _name, _parents, _reg, _mux_mask, _div_mask, _gate_mask, _flags) \
+	[_id] =	{							\
+		.type = IMX8_CLK_COMPOSITE,				\
+		.base.name = (_name),					\
+		.base.flags = 0,					\
+		.u.composite.parents = (_parents),			\
+		.u.composite.nparents = __arraycount(_parents),		\
+		.u.composite.reg = (_reg),				\
+		.u.composite.mux_mask = (_mux_mask),			\
+		.u.composite.div_mask = (_div_mask),			\
+		.u.composite.gate_mask = (_gate_mask),			\
+		.u.composite.flags = (_flags),				\
+		.enable = imx8_clk_composite_enable,			\
 		.get_rate = imx8_clk_composite_get_rate,		\
 		.set_rate = imx8_clk_composite_set_rate,		\
-		.get_parent = imx8_clk_composite_get_parent,	\
-		.set_parent = imx8_clk_composite_set_parent,	\
+		.get_parent = imx8_clk_composite_get_parent,		\
+		.set_parent = imx8_clk_composite_set_parent,		\
 	}
 
 #define	IMX8_COMPOSITE_NOMUX(_id, _name, _parent, _div_reg, _div_mask, _gate_reg, _gate_mask, _flags) \
