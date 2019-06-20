@@ -12,7 +12,8 @@ file	arch/arm/nxp/imx8_ccm_fixed.c		imx8_ccm
 file	arch/arm/nxp/imx8_ccm_gate2.c		imx8_ccm
 file	arch/arm/nxp/imx8_ccm_gate.c		imx8_ccm
 file 	arch/arm/nxp/imx8_ccm_mux.c		imx8_ccm
-file 	arch/arm/nxp/imx8_ccm_pll.c		imx8_ccm
+file 	arch/arm/nxp/imx8_ccm_fixed_factor.c	imx8_ccm
+#file 	arch/arm/nxp/imx8_ccm_pll.c		imx8_ccm
 file	arch/arm/nxp/imx8_ccm_composite.c	imx8_ccm
 #file	arch/arm/nxp/imx8_ccm_sccg_pll.c	imx8_ccm
 

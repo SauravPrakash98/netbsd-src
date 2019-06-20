@@ -276,7 +276,6 @@ static struct imx8_clk_clk imx8mq_clkc_clks[] = {
 	IMX8_CLK_FIXED(IMX8MQ_CLK_EXT3,"ext_clk_3",133000000),
 	IMX8_CLK_FIXED(IMX8MQ_CLK_EXT4,"ext_clk_4",133000000),
 	
-	//IMX8_CLK_PLL(IMX8MQ_SYS1_PLL1_OUT, "sys1_pll1_out" )
 	IMX8_CLK_FIXED_FACTOR(IMX8MQ_SYS1_PLL_40M,"sys1_pll_40m","sys1_pll_out",20,1),
 	IMX8_CLK_FIXED_FACTOR(IMX8MQ_SYS1_PLL_80M,"sys1_pll_80m","sys1_pll_out",10,1),
 	IMX8_CLK_FIXED_FACTOR(IMX8MQ_SYS1_PLL_100M,"sys1_pll_100m","sys1_pll_out",8,1),
@@ -305,35 +304,62 @@ static struct imx8_clk_clk imx8mq_clkc_clks[] = {
 	IMX8_CLK_GATE(IMX8MQ_AUDIO_PLL1_OUT,"audio_pll1_out","audio_pll1_bypass", 0x0, 21),	// base +
 	IMX8_CLK_GATE(IMX8MQ_AUDIO_PLL2_OUT,"audio_pll2_out","audio_pll2_bypass", 0x8, 21), 	// base +
 
-/*
-	IMX8_CLK_COMPOSITE(IMX8MQ_CLK_UART1,"uart1",imx8mq_uart1_parents, base + 0xaf00),
-	IMX8_CLK_COMPOSITE(IMX8MQ_CLK_UART2,"uart2",imx8mq_uart2_parents, base + 0xaf80),
-	IMX8_CLK_COMPOSITE(IMX8MQ_CLK_UART3,"uart3",imx8mq_uart3_parents, base + 0xb000),
-	IMX8_CLK_COMPOSITE(IMX8MQ_CLK_UART4,"uart4",imx8mq_uart4_parents, base + 0xb080),
-*/
+
+//	IMX8_CLK_COMPOSITE(IMX8MQ_CLK_UART1,"uart1",imx8mq_uart1_parents, base + 0xaf00, , , ),
+//	IMX8_CLK_COMPOSITE(IMX8MQ_CLK_UART2,"uart2",imx8mq_uart2_parents, base + 0xaf80,),
+//	IMX8_CLK_COMPOSITE(IMX8MQ_CLK_UART3,"uart3",imx8mq_uart3_parents, base + 0xb000),
+//	IMX8_CLK_COMPOSITE(IMX8MQ_CLK_UART4,"uart4",imx8mq_uart4_parents, base + 0xb080),
+
 	IMX8_CLK_SCCG_PLL(IMX8MQ_SYS1_PLL_OUT,"sys1_pll_out", sys1_pll_out_parents, 1, 0, 0, 0x30, CLK_IS_CRITICAL),
 	IMX8_CLK_SCCG_PLL(IMX8MQ_SYS2_PLL_OUT,"sys2_pll_out", sys2_pll_out_parents, 2, 0, 0, 0x3c, CLK_IS_CRITICAL),
 	IMX8_CLK_SCCG_PLL(IMX8MQ_SYS3_PLL_OUT,"sys3_pll_out", sys3_pll_out_parents, 2, 0, 0, 0x40, CLK_IS_CRITICAL),
 	//DRAM_PLL1_REF_OUT
+
+	IMX8_CLK_MUX(IMX8MQ_SYS1_PLL1_REF_SEL,"sys1_pll1_ref_sel", pll_ref_parents, 
+			0x30, 			// reg
+			__BITS(1,0), 		// sel
+			0),
+	IMX8_CLK_MUX(IMX8MQ_SYS2_PLL1_REF_SEL,"sys2_pll1_ref_sel", pll_ref_parents, 
+			0x3c, 			// reg
+			__BITS(1,0),		// sel
+		       	0),
+	IMX8_CLK_MUX(IMX8MQ_SYS3_PLL1_REF_SEL,"sys3_pll1_ref_sel", pll_ref_parents, 
+			0x48, 			// reg
+			__BITS(1,0), 		// sel
+			0),
+	//DRAM_PLL1_REF_SEL
+	
+	IMX8_CLK_MUX(IMX8MQ_AUDIO_PLL1_BYPASS,"audio_pll1_bypass", audio_pll1_bypass_parents,
+			0x0,			// reg 
+			__BIT(14), 		//sel
+			0), 
+	IMX8_CLK_MUX(IMX8MQ_AUDIO_PLL2_BYPASS,"audio_pll2_bypass", audio_pll2_bypass_parents,
+			0x8, 			// reg
+			__BIT(14), 		// sel
+			0), 
+	IMX8_CLK_MUX(IMX8MQ_AUDIO_PLL1_REF_SEL,"audio_pll1_ref_sel", pll_ref_parents,
+			0x0, 			// reg
+			__BITS(17,16),		// sel
+		       	0),
+	IMX8_CLK_MUX(IMX8MQ_AUDIO_PLL2_REF_SEL,"audio_pll2_ref_sel", pll_ref_parents, 
+		       	0x8, 			// reg
+			__BITS(17,16),		// sel
+		       	0),
+
 /*
-	IMX8_CLK_MUX(IMX8MQ_SYS1_PLL1_REF_SEL,"sys1_pll1_ref_sel", base + 0x30, 0, 2, pll_ref_parents, 4),
-	IMX8_CLK_MUX(IMX8MQ_SYS2_PLL1_REF_SEL,"sys2_pll1_ref_sel", base + 0x3c, 0, 2, pll_ref_parents, 4),
-	IMX8_CLK_MUX(IMX8MQ_SYS3_PLL1_REF_SEL,"sys3_pll1_ref_sel", base + 0x48, 0, 2, pll_ref_parents, 4),
-	//DRAM_PLL1_REF_SEL 
-	IMX8_CLK_MUX(IMX8MQ_AUDIO_PLL1_BYPASS,"audio_pll1_bypass", base + 0x0, 14, 1, audio_pll1_bypass_parents, 2),
-	IMX8_CLK_MUX(IMX8MQ_AUDIO_PLL2_BYPASS,"audio_pll2_bypass", base + 0x8, 14, 1, audio_pll2_bypass_parents, 2),
-	IMX8_CLK_MUX(IMX8MQ_AUDIO_PLL1_REF_SEL,"audio_pll1_ref_sel", base + 0x0, 16, 2, pll_ref_parents, 4),
-	IMX8_CLK_MUX(IMX8MQ_AUDIO_PLL2_REF_SEL,"audio_pll2_ref_sel", base + 0x8, 16 ,2, pll_ref_parents, 4),
-
-
-
 	IMX8_CLK_FRAC_PLL(IMX8MQ_AUDIO_PLL1,"audio_pll1","audio_pll1_ref_div", base + 0x0),
 	IMX8_CLK_FRAC_PLL(IMX8MQ_AUDIO_PLL2,"audio_pll2","audio_pll2_ref_div", base + 0x8),
 
-
-	IMX8_CLK_DIV(IMX8MQ_AUDIO_PLL1_REF_DIV,"audio_pll1_ref_div","audio_pll1_ref_sel", base + 0x0, 5, 6),
-	IMX8_CLK_DIV(IMX8MQ_AUDIO_PLL2_REF_DIV,"audio_pll2_ref_div","audio_pll1_ref_sel", base + 0x8, 5, 6),
-*/	
+*/
+	IMX8_CLK_DIV(IMX8MQ_AUDIO_PLL1_REF_DIV,"audio_pll1_ref_div","audio_pll1_ref_sel", 
+			0x0,			// reg
+		       	__BITS(10,5), 		// div
+			0), 			// base +
+	IMX8_CLK_DIV(IMX8MQ_AUDIO_PLL2_REF_DIV,"audio_pll2_ref_div","audio_pll1_ref_sel", 
+			0x8, 			// reg
+			__BITS(10,5), 		// div
+			0), 			// base +
+	
 };
 
 static int
