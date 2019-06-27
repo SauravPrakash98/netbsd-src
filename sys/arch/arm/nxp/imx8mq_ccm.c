@@ -34,10 +34,11 @@ static const char *audio_pll1_bypass_parents[] = {"audio_pll1", "audio_pll1_ref_
 static const char *audio_pll2_bypass_parents[] = {"audio_pll2", "audio_pll2_ref_sel", };
 //static const char *video_pll1_bypass_parents[] = {"video_pll1", "video_pll1_ref_sel", };
 
-static const char *sys1_pll_out_parents[] = {"sys1_pll1_ref_sel", };
-static const char *sys2_pll_out_parents[] = {"sys1_pll1_ref_sel", "sys2_pll1_ref_sel", };
-static const char *sys3_pll_out_parents[] = {"sys3_pll1_ref_sel", "sys2_pll1_ref_sel", };
+//static const char *sys1_pll_out_parents[] = {"sys1_pll1_ref_sel", };
+//static const char *sys2_pll_out_parents[] = {"sys1_pll1_ref_sel", "sys2_pll1_ref_sel", };
+//static const char *sys3_pll_out_parents[] = {"sys3_pll1_ref_sel", "sys2_pll1_ref_sel", };
 //static const char * dram_pll_out_parents[] = {"dram_pll1_ref_sel", };
+
 /*
 static const char * imx8mq_a53_parents[] = {"osc_25m", "arm_pll_out", "sys2_pll_500m", "sys2_pll_1000m",
 					"sys1_pll_800m", "sys1_pll_400m", "audio_pll1_out", "sys3_pll2_out", };
@@ -172,7 +173,7 @@ static const char * imx8mq_i2c3_parents[] = {"osc_25m", "sys1_pll_160m", "sys2_p
 
 static const char * imx8mq_i2c4_parents[] = {"osc_25m", "sys1_pll_160m", "sys2_pll_50m", "sys3_pll2_out", "audio_pll1_out",
 					 "video_pll1_out", "audio_pll2_out", "sys1_pll_133m", };
-*/
+
 static const char * imx8mq_uart1_parents[] = {"osc_25m", "sys1_pll_80m", "sys2_pll_200m", "sys2_pll_100m",
 					  "sys3_pll2_out", "clk_ext2", "clk_ext4", "audio_pll2_out", };
 	
@@ -184,7 +185,7 @@ static const char * imx8mq_uart3_parents[] = {"osc_25m", "sys1_pll_80m", "sys2_p
 
 static const char * imx8mq_uart4_parents[] = {"osc_25m", "sys1_pll_80m", "sys2_pll_200m", "sys2_pll_100m",
 					  "sys3_pll2_out", "clk_ext2", "clk_ext3", "audio_pll2_out", };
-/*
+*//*
 static const char * imx8mq_usb_core_parents[] = {"osc_25m", "sys1_pll_100m", "sys1_pll_40m", "sys2_pll_100m",
 					     "sys2_pll_200m", "clk_ext2", "clk_ext3", "audio_pll2_out", };
 
@@ -310,9 +311,11 @@ static struct imx8_clk_clk imx8mq_clkc_clks[] = {
 //	IMX8_CLK_COMPOSITE(IMX8MQ_CLK_UART3,"uart3",imx8mq_uart3_parents, base + 0xb000),
 //	IMX8_CLK_COMPOSITE(IMX8MQ_CLK_UART4,"uart4",imx8mq_uart4_parents, base + 0xb080),
 
-	IMX8_CLK_SCCG_PLL(IMX8MQ_SYS1_PLL_OUT,"sys1_pll_out", sys1_pll_out_parents, 1, 0, 0, 0x30, CLK_IS_CRITICAL),
-	IMX8_CLK_SCCG_PLL(IMX8MQ_SYS2_PLL_OUT,"sys2_pll_out", sys2_pll_out_parents, 2, 0, 0, 0x3c, CLK_IS_CRITICAL),
-	IMX8_CLK_SCCG_PLL(IMX8MQ_SYS3_PLL_OUT,"sys3_pll_out", sys3_pll_out_parents, 2, 0, 0, 0x40, CLK_IS_CRITICAL),
+// 	SCCG_PLL Driver not complete
+
+//	IMX8_CLK_SCCG_PLL(IMX8MQ_SYS1_PLL_OUT,"sys1_pll_out", sys1_pll_out_parents, 1, 0, 0, 0x30, CLK_IS_CRITICAL)
+//	IMX8_CLK_SCCG_PLL(IMX8MQ_SYS2_PLL_OUT,"sys2_pll_out", sys2_pll_out_parents, 2, 0, 0, 0x3c, CLK_IS_CRITICAL),
+//	IMX8_CLK_SCCG_PLL(IMX8MQ_SYS3_PLL_OUT,"sys3_pll_out", sys3_pll_out_parents, 2, 0, 0, 0x40, CLK_IS_CRITICAL),
 	//DRAM_PLL1_REF_OUT
 
 	IMX8_CLK_MUX(IMX8MQ_SYS1_PLL1_REF_SEL,"sys1_pll1_ref_sel", pll_ref_parents, 
@@ -346,11 +349,11 @@ static struct imx8_clk_clk imx8mq_clkc_clks[] = {
 			__BITS(17,16),		// sel
 		       	0),
 
-/*
-	IMX8_CLK_FRAC_PLL(IMX8MQ_AUDIO_PLL1,"audio_pll1","audio_pll1_ref_div", base + 0x0),
-	IMX8_CLK_FRAC_PLL(IMX8MQ_AUDIO_PLL2,"audio_pll2","audio_pll2_ref_div", base + 0x8),
 
-*/
+//	IMX8_CLK_FRAC_PLL(IMX8MQ_AUDIO_PLL1,"audio_pll1","audio_pll1_ref_div", base + 0x0),
+//	IMX8_CLK_FRAC_PLL(IMX8MQ_AUDIO_PLL2,"audio_pll2","audio_pll2_ref_div", base + 0x8),
+
+
 	IMX8_CLK_DIV(IMX8MQ_AUDIO_PLL1_REF_DIV,"audio_pll1_ref_div","audio_pll1_ref_sel", 
 			0x0,			// reg
 		       	__BITS(10,5), 		// div
