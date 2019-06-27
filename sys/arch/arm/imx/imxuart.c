@@ -306,8 +306,10 @@ imxuart_attach_common(device_t parent, device_t self,
 	}
 	regsp->ur_ioh = ioh;
 
-	sc->sc_ih = intr_establish(sc->sc_intr, IPL_SERIAL, IST_LEVEL,
-	    imxuintr, sc);
+	if (intr != -1) {
+		sc->sc_ih = intr_establish(sc->sc_intr, IPL_SERIAL, IST_LEVEL,
+	    	imxuintr, sc);
+	}
 	if (sc->sc_ih == NULL) {
 		aprint_error_dev(sc->sc_dev, "intr_establish failed\n");
 		return;

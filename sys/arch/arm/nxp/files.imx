@@ -21,4 +21,11 @@ file	arch/arm/nxp/imx8_ccm_composite.c	imx8_ccm
 # IMX8MQ clock controller
 device	imx8mqclkc: imx8_ccm
 attach	imx8mqclkc at fdt with imx8mq_ccm
-file 	arch/arm/nxp/imx8mq_ccm.c	imx8mq_ccm
+file 	arch/arm/nxp/imx8mq_ccm.c		imx8mq_ccm
+
+#IMX8MQ UART
+device 	imxuart
+attach	imxuart at fdt with imx8_uart
+file	arch/arm/imx/imxuart.c			imxuart needs-flag
+file	arch/arm/nxp/imx8_uart.c		imx8_uart
+defflag	opt_imxuart.h				IMXUARTCONSOLE
