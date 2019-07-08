@@ -278,6 +278,7 @@ sunxipwm*	at fdt? pass 3		# Allwinner PWM
 # MPIO / Pinmux
 rkiomux*	at fdt?	pass 3		# Rockchip IOMUX
 tegrapinmux*	at fdt?			# NVIDIA Tegra MPIO
+imx8iomux*	at fdt ? pass 3		# Freescale IMX8MQ IOMUX
 
 # XUSB PADCTL
 tegra210xpad*	at fdt?			# NVIDIA Tegra XUSB PADCTL (T210)

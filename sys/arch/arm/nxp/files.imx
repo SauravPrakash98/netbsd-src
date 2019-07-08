@@ -29,3 +29,8 @@ attach	imxuart at fdt with imx8_uart
 file	arch/arm/imx/imxuart.c			imxuart needs-flag
 file	arch/arm/nxp/imx8_uart.c		imx8_uart
 defflag	opt_imxuart.h				IMXUARTCONSOLE
+
+#IMX8MQ IOMUX
+device 	imx8iomux
+attach	imx8iomux at fdt
+file	arch/arm/nxp/imx8_iomux.c		imx8iomux

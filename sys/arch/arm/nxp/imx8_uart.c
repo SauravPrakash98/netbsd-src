@@ -19,7 +19,7 @@ CFATTACH_DECL_NEW(imx8_uart, sizeof(struct imxuart_softc),
 	imx8_uart_match, imx8_uart_attach, NULL, NULL);
 
 static const char * compatible[] = {
-	"fsl,imx8-uart",
+	"fsl,imx8mq-uart",
 	NULL
 };
 
