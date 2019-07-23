@@ -32,6 +32,7 @@ __KERNEL_RCSID(0, "$NetBSD: imx8_platform.c $");
 
 #include <libfdt.h>
 #include <arm/nxp/imx8_platform.h>
+#include <arm/nxp/imx8_uart.h>
 
 
 extern struct arm32_bus_dma_tag arm_generic_dma_tag;
@@ -49,9 +50,11 @@ imx8_platform_early_putchar(char c)
 	volatile uint32_t *uartaddr = cpu_earlydevice_va_p() ?
 		(volatile uint32_t *)CONSADDR_VA :
 		(volatile uint32_t *)CONSADDR;
-	while ((le32toh(uartaddr[com_lsr]) & LSR_TXRDY) == 0)
+
+	while ((uartaddr[IMX8_UTS / 4] & UTS_TXFULL) != 0)
 		;
-	uartaddr[com_data] = htole32(c);
+
+	uartaddr[IMX8_URTX0 / 4] = c;
 #endif
 }
 
@@ -72,7 +75,7 @@ imx8_platform_devmap(void)
 static void
 imx8_platform_init_attach_args(struct fdt_attach_args *faa)
 {
-	faa->faa_bst = &arm_generic_bs_tag;	// add these
+	faa->faa_bst = &arm_generic_bs_tag;
 	faa->faa_a4x_bst = &arm_generic_a4x_bs_tag;
 	faa->faa_dmat = &arm_generic_dma_tag;
 }
@@ -86,12 +89,12 @@ imx8_platform_device_register(device_t self, void *aux)
 static u_int
 imx8_platform_uart_freq(void)
 {
-	return IMX8_BASE_FREQ;   // add the value to this macro
+	return IMX8_BASE_FREQ;
 }
 
 
-static const struct arm_platform imx8m_platform = {
-	.ap_devmap = imx8_platform_devmap,  //write the function
+static const struct arm_platform imx8mq_platform = {
+	.ap_devmap = imx8_platform_devmap,
 	.ap_bootstrap = arm_fdt_cpu_bootstrap,  //imx8_platform_bootstrap
 	.ap_init_attach_args = imx8_platform_init_attach_args,
 	.ap_device_register = imx8_platform_device_register,  //empty function for now
@@ -101,4 +104,4 @@ static const struct arm_platform imx8m_platform = {
 	.ap_mpstart = arm_fdt_cpu_mpstart,
 };
 
-ARM_PLATFORM(imx8, "nxp,imx8m", &imx8m_platform);
+ARM_PLATFORM(imx8, "fsl,imx8mq", &imx8mq_platform);
