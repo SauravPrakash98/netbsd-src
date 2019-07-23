@@ -19,7 +19,7 @@ static int imx8mq_clkc_match(device_t, cfdata_t, void *);
 static void imx8mq_clkc_attach(device_t, device_t, void *);
 
 static const char * const compatible[] = {
-	"fsl,imx8mq-clkc",
+	"fsl,imx8mq-ccm",
 	NULL
 };
 

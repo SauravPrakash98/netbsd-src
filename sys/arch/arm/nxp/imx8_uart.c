@@ -4,8 +4,6 @@
 #include <sys/bus.h>
 #include <sys/device.h>
 
-#include <arm/nxp/imx8_reg.h>
-//#include <arm/nxp/imx8var.h> // not present now
 
 #include <arm/imx/imxuartreg.h>
 #include <arm/imx/imxuartvar.h>

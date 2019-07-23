@@ -121,16 +121,17 @@ options		SOC_IMX8
 
 pseudo-device 	openfirm	# /dev/openfirm
 
-#options 	DIAGNOSTIC	# internal consistency checks
-#options 	DEBUG
+options 	DIAGNOSTIC	# internal consistency checks
+options 	DEBUG
 #options 	LOCKDEBUG
 #options 	PMAP_DEBUG	# Enable pmap_debug_level code
-#options 	VERBOSE_INIT_ARM # verbose bootstrapping messages
+options 	VERBOSE_INIT_ARM # verbose bootstrapping messages
 options 	INCLUDE_CONFIG_FILE
 #options 	UVMHIST
 #options 	UVMHIST_PRINT,KERNHIST_DELAY=0
 
 # EARLYCONS is required for early init messages from VERBOSE_INIT_ARM.
+options 	EARLYCONS=imx8, CONSADDR=0x30860000
 #options 	EARLYCONS=bcm2837
 #options 	EARLYCONS=meson, CONSADDR=0xc81004c0
 #options 	EARLYCONS=rk3328, CONSADDR=0xff130000
@@ -259,7 +260,7 @@ sunxiresets*	at fdt? pass 1		# Allwinner misc. resets
 sunxigates*	at fdt? pass 1		# Allwinner misc. gates
 sunxigmacclk*	at fdt? pass 2		# Allwinner GMAC MII/RGMII clock mux
 tegra210car*	at fdt? pass 3		# NVIDIA Tegra CAR (T210)
-imx8mqclkc*	at fdt? pass 2		# Freescale IMX8MQ clock controller
+#imx8mqclkc*	at fdt? pass 2		# Freescale IMX8MQ clock controller
 
 # GPIO controller
 bcmgpio*	at fdt?			# Broadcom BCM283x GPIO
