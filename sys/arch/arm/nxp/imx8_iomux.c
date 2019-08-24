@@ -1,5 +1,5 @@
 #include <sys/cdefs.h>
-__KERNEL_RCSID(0, "$NetBSD: imx7_iomux.c$");
+__KERNEL_RCSID(0, "$NetBSD: imx8_iomux.c$");
 
 #include <sys/bus.h>
 #include <sys/device.h>
@@ -28,6 +28,7 @@ CFATTACH_DECL_NEW(imx8iomux, sizeof(struct imx8iomux_softc),
 
 static const char * compatible[] = {
 	"fsl,imx8mq-iomuxc",
+	"fsl,imx8mq-iomuxc-gpr",
 	NULL
 };
 

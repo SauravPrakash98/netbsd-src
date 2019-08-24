@@ -314,6 +314,7 @@ imxuart_attach_common(device_t parent, device_t self,
 		aprint_error_dev(sc->sc_dev, "intr_establish failed\n");
 		return;
 	}
+	
 
 	imxuart_attach_subr(sc);
 }
