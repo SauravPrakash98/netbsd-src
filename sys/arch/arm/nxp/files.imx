@@ -19,9 +19,9 @@ file	arch/arm/nxp/imx8_ccm_composite.c	imx8_ccm
 
 
 # IMX8MQ clock controller
-device	imx8mqclkc: imx8_ccm
-attach	imx8mqclkc at fdt with imx8mq_ccm
-file 	arch/arm/nxp/imx8mq_ccm.c		imx8mq_ccm
+#device	imx8mqclkc: imx8_ccm
+#attach	imx8mqclkc at fdt with imx8mq_ccm
+#file 	arch/arm/nxp/imx8mq_ccm.c		imx8mq_ccm
 
 #IMX8MQ UART
 device 	imxuart
@@ -34,3 +34,14 @@ defflag	opt_imxuart.h				IMXUARTCONSOLE
 device 	imx8iomux
 attach	imx8iomux at fdt
 file	arch/arm/nxp/imx8_iomux.c		imx8iomux
+
+#GPC
+device	imxgpc
+attach	imxgpc at fdt
+file	arch/arm/imx/fdt/imx6_gpc.c		imxgpc
+
+#CCM
+#device	imxccm: clk
+#attach	imxccm at fdt
+#file	arch/arm/imx/imx6_ccm.c			imxccm
+#file	arch/arm/imx/fdt/imx6_clk.c		imxccm

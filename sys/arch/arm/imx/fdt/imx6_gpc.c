@@ -68,7 +68,7 @@ CFATTACH_DECL_NEW(imxgpc, sizeof(struct imxgpc_softc),
 static int
 imxgpc_match(device_t parent, cfdata_t cf, void *aux)
 {
-	const char * const compatible[] = { "fsl,imx6q-gpc", NULL };
+	const char * const compatible[] = { "fsl,imx6q-gpc","fsl,imx8mq-gpc", NULL };
 	struct fdt_attach_args * const faa = aux;
 
 	return of_match_compatible(faa->faa_phandle, compatible);

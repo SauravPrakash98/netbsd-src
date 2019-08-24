@@ -44,6 +44,7 @@ __KERNEL_RCSID(0, "$NetBSD: imx6_ccm.c,v 1.15 2019/11/12 04:32:36 hkenken Exp $"
 #include <sys/cpufreq.h>
 #include <sys/malloc.h>
 #include <sys/param.h>
+#include <sys/atomic.h>
 
 #include <machine/cpu.h>
 
